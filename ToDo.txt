@@ -1,6 +1,5 @@
 GENERAL
 --------------------------------------------------
-- add scope settings
 - include duty cycle, triangle, and sawtooth options
 - gray out fields for various signals
 - remove "enable" for function generator; instead, include in signal drop down as "(none)";
@@ -8,6 +7,8 @@ GENERAL
 - include CH1 + CH2 (long-term feature!)
 - ??? why is sine wave propagating at kHz?
 - save settings in local Storage
+- disable some function generator inputs
+
 
 
 

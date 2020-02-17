@@ -9,8 +9,10 @@
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css">
     
-    <!-- fonts -->
+    <!-- fonts & icons -->
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
     
     <!-- import the webpage's javascript file -->
     <script src="/script.js" defer></script>
@@ -36,9 +38,9 @@
             <option value="Square">Square</option>
           </select>
         </div>
-        <div class="signal-data">
+        <div class="signal-data" id="signal-data-freq">
           <label for="inpFreq">Frequency</label>
-          <div class="signal-data-freq">
+          <div class="signal-data-row">
             <input id="inpFreq" type="number" step="10" value="250" min = "0" max="999"/>
             <select name="fUnit" id="selFreqUnit">
               <option value="Hz">Hz</option>
@@ -48,26 +50,28 @@
           </div>
         </div>
         <div class="signal-data" id="signal-data-volts">
-          <div class="signal-data-amp">
-            <label for="inpVolt">Amplitude</label>
+          <label for="inpVolt">Amplitude</label>
+          <div class="signal-data-row">
             <input id="inpVolt" type="number" min="-999" max="999" step="0.1" value="4"/> 
             <select name="vUnit" id="selVoltUnit">
               <option value="mV">mV</option>
               <option value="V">V</option>
               <option value="kV">kV</option>
-            </select>          
+            </select>
           </div>
-          <div class="signal-data-off">
-            <label for="inpOff">DC Offset</label>
+        </div>
+        <div class="signal-data" id="signal-data-off">
+          <label for="inpOff">DC Offset</label>
+          <div class="signal-data-row">
             <input id="inpOff" type="number" min="-999" max="999" step="0.1" value="0"/> 
             <select name="vUnit" id="selOffUnit">
               <option value="mV">mV</option>
               <option value="V">V</option>
               <option value="kV">kV</option>
-            </select>          
+           </select>
           </div>
         </div>
-        <div class="signal-data">
+        <div class="signal-data" id="signal-data-phase">
           <label for="inpPhase">Phase (deg)</label>
           <input id="inpPhase" type="number" min="-360" max="360" step="1" value="0"/>
         </div>
@@ -90,47 +94,17 @@
       <div class="settings">
         <h2>Scope Settings</h2>
         <div class="settings-time">
-          <h3 class="settings-titles">Time (sec/div)</h3>       
-          <div class="settings-time-forms">
-            <!-- <input id="inpTime" type="number" step="1" value="1" min = "0" max="999"/> -->
-            <select name="tValue" id="inpTime">
-              <option value="0.01">0.01</option>
-              <option value="0.02">0.02</option>
-              <option value="0.05">0.05</option>
-              <option value="0.1">0.1</option>
-              <option value="0.2">0.2</option>
-              <option value="0.5">0.5</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-              <option value="200">200</option>
-              <option value="500">500</option>
-            </select>
-            <select name="tUnit" id="selTimeUnit">
-              <option value="us">&#956;sec</option>
-              <option value="ms">msec</option>
-            </select>
-          </div>
-        </div>
-        <div class="settings-volts">
-          <div class="channel1">
-            <h3 class="settings-titles">Channel1 (V/div)</h3>  
-            <div class="settings-channel1-forms">
-              <!-- <input id="inpVoltsCh1" type="number" step="1" value="1" min = "0" max="999"/> 
-              <select name="vCH1Unit" id="selVoltsCh1">
-                <option value="mV">mV</option>
-                <option value="V">V</option>
-                <option value="kV">kV</option>
-              </select>
-              -->
-              <select name="voltsCH1" id="inpVoltsCh1">
-                <option value="0.001">0.001</option>
+          <div class="settings-time-left">
+            <label class="settings-titles">Time (sec/div)</label>       
+            <div class="settings-time-forms flex-row">
+              <!-- <input id="inpTime" type="number" step="1" value="1" min = "0" max="999"/> -->
+              <select name="tValue" id="inpTime">
                 <option value="0.01">0.01</option>
+                <option value="0.02">0.02</option>
+                <option value="0.05">0.05</option>
                 <option value="0.1">0.1</option>
+                <option value="0.2">0.2</option>
+                <option value="0.5">0.5</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="5">5</option>
@@ -138,32 +112,86 @@
                 <option value="20">20</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="500">500</option>
+              </select>
+              <select name="tUnit" id="selTimeUnit">
+                <option value="us">&#956;sec</option>
+                <option value="ms">msec</option>
               </select>
             </div>
           </div>
-          <div class="channel2">
-            <h3 class="settings-titles">Channel2 (V/div)</h3>       
-            <div class="settings-channel2-forms">
-              <!-- <input id="inpVoltsCh2" type="number" step="1" value="1" min = "0" max="999"/>
-              <select name="vCH2Unit" id="selVoltsCh2">
-                <option value="mV">mV</option>
-                <option value="V">V</option>
-                <option value="kV">kV</option>
-              </select>
-              -->
-              <select name="voltsCH2" id="inpVoltsCh2">
-                <option value="0.001">0.001</option>
-                <option value="0.01">0.01</option>
-                <option value="0.1">0.1</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-              
+          <div class="settings-times-right">
+            <label>Adj. Horiz.</label>
+            <div class="arrow-rows">
+              <div class="arrows">
+                <i class="material-icons" id="time-left">keyboard_arrow_left</i>
+              </div>
+              <div class="arrows">
+                <i class="material-icons" id="time-right">keyboard_arrow_right</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-volts">
+          <div class="settings-channel1">
+            <div class="settings-channel1-left">
+              <label class="settings-titles">Channel1 (V/div)</label>  
+              <div class="settings-channel1-forms">
+                <select name="voltsCH1" id="inpVoltsCh1">
+                  <option value="0.001">0.001</option>
+                  <option value="0.01">0.01</option>
+                  <option value="0.1">0.1</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>              
+              </div>
+            </div>
+            <div class="settings-channel1-right">
+              <label>Adj. Vert.</label>
+              <div class="arrow-rows">
+                <div class="arrows">
+                  <i class="material-icons" id="ch1-down">keyboard_arrow_down</i>
+                </div>
+                <div class="arrows">
+                  <i class="material-icons" id="ch1-up">keyboard_arrow_up</i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="settings-channel2">
+            <div class="settings-channel2-left">
+              <label class="settings-titles">Channel2 (V/div)</label>       
+              <div class="settings-channel2-forms">
+                <select name="voltsCH2" id="inpVoltsCh2">
+                  <option value="0.001">0.001</option>
+                  <option value="0.01">0.01</option>
+                  <option value="0.1">0.1</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>              
+            </div>
+            <div class="settings-channel2-right">
+              <label>Adj. Vert.</label>
+              <div class="arrow-rows">
+                <div class="arrows">
+                  <i class="material-icons" id="ch2-down">keyboard_arrow_down</i>
+                </div>
+                <div class="arrows">
+                  <i class="material-icons" id="ch2-up">keyboard_arrow_up</i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
