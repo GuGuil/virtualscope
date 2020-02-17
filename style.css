@@ -4,6 +4,21 @@
   box-sizing: border-box;
 }
 
+
+input, select {
+  border: none;
+  font-size: 0.8em;
+  width: 60px;
+  height: 25px;
+}
+
+label {
+  display: block;
+  font-size: 0.6em;
+  margin-bottom: 5px;
+}
+
+
 html {
   height: 100%;
   width: 100%;
@@ -19,11 +34,19 @@ body {
   min-width: 350px;
   display: flex;
   align-items: center;
+  
+  
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
 }
 
 .container-signal {
-  /* position: absolute; */
-  width: 140px;
+  width: 150px;
   height: 100%;
   padding: 10px;
   background: #00337e;
@@ -40,6 +63,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  max-height: 500px;
 }
 
 
@@ -55,70 +79,41 @@ body {
   color: #333 !important;
 }
 
-
 #out2.selected-output {
   background: #FFFF00 !important;
   color: #333 !important;
 }
 
 
-.signal-data {
+.signal-data-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.signal-data-freq {
-  display: flex;
-}
-
-#signal-data-volts {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.signal input[type="checkbox"] {
-  margin: 5px;
-}
 
 .signal p {
   font-size: 0.7em;
   text-align: center;
 }
 
-.signal-data label {
-  font-size: 0.6em;
-  display: block;
+
+
+.signal-data input {
+  width: 70px;
+  padding-left: 3px;
 }
 
-.signal-data input, .signal-data select {
-  font-size: 0.8em;
-  margin: 2px 5px 5px 0px;
-  width: 60px;
+.signal-data select {  
+  border: none;
+  border-left: 1px solid blue;
 }
 
-#signal-data-type select {
+#signalSelect {
   width: 90px;
 }
 
-.signal-data-off input,
-.signal-data-amp input {
-  width: 50px;
-  margin-bottom: 30px;
-}
 
-.signal-data-freq select, 
-.signal-data-amp select,
-.signal-data-off select {
-  padding-bottom: 1px;
-  margin: 2px 5px 5px -8px;
-  width: 60px;
-}
-
-.signal-data-amp select,
-.signal-data-off select {
-  margin-left: -11px;
-}
 
 
 
@@ -163,30 +158,89 @@ body {
 
 
 .settings {
-  padding: 10px 20px;
+  padding: 10px 10px;
   text-align: center;
   margin-top: 20px;
   background: #BBB;
   border-radius: 10px;
   box-shadow: 0 0 8px -4px #333;
+  width: 100%;
+  max-width: 400px;
+  color: #333;
+}
+
+.settings-time, .settings-channel1, .settings-channel2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.settings-time-left {
+  width: 60%;
+}
+
+.settings-time-right {
+  width: 40%;
+}
+
+.settings-time-forms {
+  justify-content: center;
 }
 
 .settings h2 {
-  color: #333;
   font-size: 0.8em;
   margin: 5px 0 10px 0;
 }
 
-.settings h3 {
-  font-size: 0.6em;
-  color: #333;
+#selTimeUnit {
+  border-left: 1px solid #999;
 }
 
 .settings > div, .settings-volts > div {
   margin-bottom: 15px;
 }
 
+.arrow-rows {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
 
+.arrows i {
+  border: 1px solid #999;
+  padding: 2px;
+  margin-left: 5px;
+  background: #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+
+
+
+
+
+/*  misc form customizations */
+input:disabled, select:disabled {
+  background: #626262;
+}
+
+input {
+  border: none;
+}
+
+
+
+/********  FRAMEWORK CLASSES ***********/
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.clicked {
+  background: #888 !important;
+}
 
 
 
@@ -194,6 +248,10 @@ body {
 @media screen and (min-width: 350px) {
   html {
       font-size: calc(16px + 6 * ((100vw - 350px) / 450));
+  }
+  
+  .settings select {
+    width: 70px;
   }
 }
 
@@ -232,63 +290,6 @@ body {
     justify-content: space-around;
   }
 
-  .signal-data {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .signal-data-freq {
-    display: flex;
-  }
-
-  #signal-data-volts {
-    display: flex;
-    flex-direction: row;
-  }
-
-
-  .signal input[type="checkbox"] {
-    margin: 5px;
-  }
-
-  .signal p {
-    font-size: 0.7em;
-    text-align: center;
-  }
-
-  .signal-data label {
-    font-size: 0.6em;
-    display: block;
-  }
-
-  .signal-data input, .signal-data select {
-    font-size: 0.8em;
-    margin: 2px 5px 5px 0px;
-    width: 60px;
-  }
-
-  #signal-data-type select {
-    width: 90px;
-  }
-
-  .signal-data-off input,
-  .signal-data-amp input {
-    width: 55px;
-    margin-bottom: 0x;
-  }
-
-  .signal-data-freq select, 
-  .signal-data-amp select,
-  .signal-data-off select {
-    padding-bottom: 1px;
-    margin: 2px 10px 5px -9px;
-    width: 60px;
-  }
-  
-  .signal-data-amp select,
-  .signal-data-off select {
-    margin-left: -12px;
-  }
     
   
   .signal-summary {
@@ -302,6 +303,7 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    padding: 10px;
   }
   
   
@@ -311,7 +313,8 @@ body {
   }
   
   .settings {
-    margin-left: 30px;
+    margin-left: 20px;
+    max-width: 320px;
   }
   
 }
@@ -327,35 +330,17 @@ body {
   
   .signal-data input, .signal-data select {
     font-size: 0.8em;
-    margin: 2px 5px 5px 0px;
-    width: 100px;
-  }
-
-  #signal-data-type select {
-    width: 100px;
-  }
-
-  .signal-data-off input,
-  .signal-data-amp input {
-    width: 100px;
-    margin-bottom: 0x;
-  }
-
-  .signal-data-freq select, 
-  .signal-data-amp select,
-  .signal-data-off select {
-    padding-bottom: 1px;
-    margin: 2px 15px 5px -9px;
     width: 70px;
+    height: 25px;
   }
-  
-  
-  .signal-data-amp select,
-  .signal-data-off select {
-    margin-left: -12px;
-  }
-  
-  
 
+  .signal-data input {
+    width: 80px;
+    padding-left: 4px;
+  }
+
+  #signalSelect {
+    width: 100px;
+  }
 
 }

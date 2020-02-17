@@ -36,18 +36,22 @@ let d = {
     lineWidth: 8
   },
   scope: {
+    adjFactor: 10,
     timePerDivRaw: 1,
     timeUnit: "ms",
     timePerDiv: function() { return getUnitMultiplier(this.timePerDivRaw, this.timeUnit)},
+    hAdjust: 0,
     ch1: {
       voltsPerDivRaw: 1,
       voltsPerDivUnit: "V",
-      voltsPerDiv: function() { return getUnitMultiplier(this.voltsPerDivRaw, this.voltsPerDivUnit)}
+      voltsPerDiv: function() { return getUnitMultiplier(this.voltsPerDivRaw, this.voltsPerDivUnit)},
+      vAdjust: 0
     },
     ch2: {
       voltsPerDivRaw: 1,
       voltsPerDivUnit: "V",
-      voltsPerDiv: function() { return getUnitMultiplier(this.voltsPerDivRaw, this.voltsPerDivUnit)}
+      voltsPerDiv: function() { return getUnitMultiplier(this.voltsPerDivRaw, this.voltsPerDivUnit)},
+      vAdjust: 0
     }
   },
   signal: {
@@ -402,6 +406,7 @@ function eventInputAll(e) {
   if (e.target.matches ('#inpVoltsCh1')) {d.scope.ch1.voltsPerDivRaw = e.target.value};
   if (e.target.matches ('#inpVoltsCh2')) {d.scope.ch2.voltsPerDivRaw = e.target.value};
   
+  disableForms(d.signal[out].type.toLowerCase());
   updateSignalSummary();  
   render();  
 }
@@ -470,6 +475,46 @@ let getSignalPix = (out) => {
   
 }
 
+function disableForms(signal) {
+  if (signal === 'dc') {
+    let ids = ['inpFreq', 'selFreqUnit', 'inpVolt', 'selVoltUnit', 'inpPhase'];
+    ids.forEach(function (v,i) {
+      document.getElementById(v).disabled = true;
+    })
+  } else {
+    let p = document.querySelectorAll("input, select");
+    p.forEach(function(v,i) {p[i].disabled = false});
+  }
+}
+
+function handleAdjust(target) {
+  
+  switch (target.id) {
+    case "time-right":
+      d.scope.hAdjust += d.scope.adjFactor;
+      break;
+    case "time-left":
+      d.scope.hAdjust -= d.scope.adjFactor;;
+      break;
+    case "ch1-up":
+      d.scope.ch1.vAdjust += d.scope.adjFactor;;
+      break;
+    case "ch1-down":
+      d.scope.ch1.vAdjust -= d.scope.adjFactor;
+      break;
+    case "ch2-up":
+      d.scope.ch2.vAdjust += d.scope.adjFactor;
+      break;
+    case "ch2-down":
+      d.scope.ch2.vAdjust -= d.scope.adjFactor;
+      break;
+    default:
+      break;      
+  }
+  
+  render();
+}
+
 
 ////////////////////////////////////////////////////////////////
 ///////             EVENTS                     ///////////////
@@ -514,4 +559,15 @@ outSelect.addEventListener("click", event => {
   updateSignalSummary();
 });
 
+//scope arrows
+let arrows = document.querySelectorAll(".arrows").forEach(item => {
+  item.addEventListener('mousedown', event => {
+    handleAdjust(event.target);
+    //css
+    event.target.classList.add("clicked");
+    setTimeout(function() {
+      event.target.classList.remove("clicked");
+    }, 100, event.target)
+  })
+});
 
