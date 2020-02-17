@@ -1,0 +1,361 @@
+* {  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+}
+
+body {
+  font-family: helvetica, arial, sans-serif;
+  background: #f0f0f0;
+  color: #ccc;
+  width: 100%;
+  height: 100%;
+  min-width: 350px;
+  display: flex;
+  align-items: center;
+}
+
+.container-signal {
+  /* position: absolute; */
+  width: 140px;
+  height: 100%;
+  padding: 10px;
+  background: #00337e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.signal {
+  height: 100%;
+  width: 100%;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+
+.output-select h4 {
+  background: #00337e;
+  color: #484848;
+  padding: 4px;
+  border: 1px solid #666;
+}
+
+#out1.selected-output {
+  background: #00FF00 !important;
+  color: #333 !important;
+}
+
+
+#out2.selected-output {
+  background: #FFFF00 !important;
+  color: #333 !important;
+}
+
+
+.signal-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.signal-data-freq {
+  display: flex;
+}
+
+#signal-data-volts {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.signal input[type="checkbox"] {
+  margin: 5px;
+}
+
+.signal p {
+  font-size: 0.7em;
+  text-align: center;
+}
+
+.signal-data label {
+  font-size: 0.6em;
+  display: block;
+}
+
+.signal-data input, .signal-data select {
+  font-size: 0.8em;
+  margin: 2px 5px 5px 0px;
+  width: 60px;
+}
+
+#signal-data-type select {
+  width: 90px;
+}
+
+.signal-data-off input,
+.signal-data-amp input {
+  width: 50px;
+  margin-bottom: 30px;
+}
+
+.signal-data-freq select, 
+.signal-data-amp select,
+.signal-data-off select {
+  padding-bottom: 1px;
+  margin: 2px 5px 5px -8px;
+  width: 60px;
+}
+
+.signal-data-amp select,
+.signal-data-off select {
+  margin-left: -11px;
+}
+
+
+
+
+.container-scope {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 15px;
+}
+
+.monitor {
+  width: 100%;
+  max-width: 400px;
+}
+
+.signal-summary {
+  text-align: left;
+  font-size: 0.5em;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: #111;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+
+.screen {
+  width: 100%;
+  padding: 6px 6px 2px 6px;
+  background: #777;
+  border-radius: 10px;
+  box-shadow: 0 0 8px -4px #333;
+}
+
+#myCanvas {
+  box-shadow: 0 0 8px -2px #333;
+}
+
+
+
+.settings {
+  padding: 10px 20px;
+  text-align: center;
+  margin-top: 20px;
+  background: #BBB;
+  border-radius: 10px;
+  box-shadow: 0 0 8px -4px #333;
+}
+
+.settings h2 {
+  color: #333;
+  font-size: 0.8em;
+  margin: 5px 0 10px 0;
+}
+
+.settings h3 {
+  font-size: 0.6em;
+  color: #333;
+}
+
+.settings > div, .settings-volts > div {
+  margin-bottom: 15px;
+}
+
+
+
+
+
+
+@media screen and (min-width: 350px) {
+  html {
+      font-size: calc(16px + 6 * ((100vw - 350px) / 450));
+  }
+}
+
+
+
+/* ------------------------------------------------ */
+/*     MEDIA QUERY FOR SCREEN WIDTH > 800 PX        */
+/* ------------------------------------------------ */
+
+@media screen and (min-width: 800px) {
+  html {
+      font-size: 22px;
+  }
+  
+  body {
+    flex-direction: column;
+  }
+  
+  .container-signal {
+    width: 100%;
+    height: 90px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  
+  .signal {
+    height: 100%;
+    width: 100%;
+    max-width: 1150px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .signal-data {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .signal-data-freq {
+    display: flex;
+  }
+
+  #signal-data-volts {
+    display: flex;
+    flex-direction: row;
+  }
+
+
+  .signal input[type="checkbox"] {
+    margin: 5px;
+  }
+
+  .signal p {
+    font-size: 0.7em;
+    text-align: center;
+  }
+
+  .signal-data label {
+    font-size: 0.6em;
+    display: block;
+  }
+
+  .signal-data input, .signal-data select {
+    font-size: 0.8em;
+    margin: 2px 5px 5px 0px;
+    width: 60px;
+  }
+
+  #signal-data-type select {
+    width: 90px;
+  }
+
+  .signal-data-off input,
+  .signal-data-amp input {
+    width: 55px;
+    margin-bottom: 0x;
+  }
+
+  .signal-data-freq select, 
+  .signal-data-amp select,
+  .signal-data-off select {
+    padding-bottom: 1px;
+    margin: 2px 10px 5px -9px;
+    width: 60px;
+  }
+  
+  .signal-data-amp select,
+  .signal-data-off select {
+    margin-left: -12px;
+  }
+    
+  
+  .signal-summary {
+    font-size: 0.7em;
+  }
+  
+  .container-scope {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  
+  .monitor {
+    width: calc(1.25 * 0.8 * (100vh - 170px)); /* include 80% buffer */
+    max-width: 800px;
+  }
+  
+  .settings {
+    margin-left: 30px;
+  }
+  
+}
+
+
+
+
+/* ------------------------------------------------ */
+/*     MEDIA QUERY FOR SCREEN WIDTH > 1150 PX        */
+/* ------------------------------------------------ */
+
+@media screen and (min-width: 1150px) {
+  
+  .signal-data input, .signal-data select {
+    font-size: 0.8em;
+    margin: 2px 5px 5px 0px;
+    width: 100px;
+  }
+
+  #signal-data-type select {
+    width: 100px;
+  }
+
+  .signal-data-off input,
+  .signal-data-amp input {
+    width: 100px;
+    margin-bottom: 0x;
+  }
+
+  .signal-data-freq select, 
+  .signal-data-amp select,
+  .signal-data-off select {
+    padding-bottom: 1px;
+    margin: 2px 15px 5px -9px;
+    width: 70px;
+  }
+  
+  
+  .signal-data-amp select,
+  .signal-data-off select {
+    margin-left: -12px;
+  }
+  
+  
+
+
+}
