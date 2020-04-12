@@ -36,7 +36,7 @@ let d = {
     lineWidth: 8
   },
   scope: {
-    adjFactor: 10,
+    adjFactor: 0.01, //1% fo screen width or height
     timePerDivRaw: 1,
     timeUnit: "ms",
     timePerDiv: function() { return getUnitMultiplier(this.timePerDivRaw, this.timeUnit)},
@@ -172,6 +172,8 @@ CanvasRenderingContext2D.prototype.drawGrid = function () {
   
   var scopeWidth = document.getElementsByClassName("monitor")[0].offsetWidth;
   
+  let y0,y1,x0,x1;
+  
   var gridWidth = d.dims.right * 2;
   var gridHeight = d.dims.bottom * 2;
   
@@ -179,28 +181,59 @@ CanvasRenderingContext2D.prototype.drawGrid = function () {
   let minorLine = scopeWidth < 400 ? 2 : 2;
   let majorLine = scopeWidth < 400 ? 4 : 6;
   
-  var xScale = gridWidth / 10;
-  var yScale = gridHeight / 8;  
+  var xScale = gridWidth / 50;
+  var yScale = gridHeight / 40;  
   
   ctx.strokeStyle = d.props.gridLineColor;
   ctx.lineWidth = minorLine;
   
   // vertical lines
-  for (var i=0; i<11; i++) {
+  for (var i=0; i<51; i++) {
     
     ctx.beginPath();
-    ctx.lineWidth = i === 5 ? majorLine : minorLine;
-    ctx.moveTo(d.dims.left + xScale * i, d.dims.top);
-    ctx.lineTo(d.dims.left + xScale * i, d.dims.bottom,);    
+    //ctx.lineWidth = i === 25 ? majorLine : minorLine;
+    
+    
+    if (i === 25) {
+      ctx.lineWidth = majorLine;
+      y0=d.dims.top;
+      y1=d.dims.bottom;      
+    } else if (i % 5 === 0) {
+      ctx.lineWidth = minorLine;
+      y0=d.dims.top;
+      y1=d.dims.bottom;
+    } else {
+      ctx.lineWidth = 1;
+      y0=10;
+      y1=-10;
+    }
+    
+    ctx.moveTo(d.dims.left + xScale * i, y0);
+    ctx.lineTo(d.dims.left + xScale * i, y1);    
     ctx.stroke();
   }
   
   // horizontal lines
-  for (i=0; i<9; i++) {
-    ctx.lineWidth = i === 4 ? majorLine : minorLine;
+  for (i=0; i<41; i++) {
+    //ctx.lineWidth = i === 21 ? majorLine : minorLine;
+    
+    if (i === 20) {
+      ctx.lineWidth = majorLine;
+      x0=d.dims.left;
+      x1=d.dims.right;
+    } else if (i % 5 === 0) {
+      ctx.lineWidth = minorLine;
+      x0=d.dims.left;
+      x1=d.dims.right;      
+    } else {
+      ctx.lineWidth = 1;
+      x0=10;
+      x1=-10;
+    }
+    
     ctx.beginPath();
-    ctx.moveTo(d.dims.left, d.dims.top + yScale * i);
-    ctx.lineTo(d.dims.right, d.dims.top + yScale * i);    
+    ctx.moveTo(x0, d.dims.top + yScale * i);
+    ctx.lineTo(x1, d.dims.top + yScale * i);    
     ctx.stroke();
   }  
 }
@@ -210,11 +243,11 @@ CanvasRenderingContext2D.prototype.drawGrid = function () {
 //*********** DIRECT CURRENT SIGNAL  ******************//
 CanvasRenderingContext2D.prototype.drawDC = function (out) {
   
-  let y = -getSignalPix(out).offsetPix;
+  let y = -getSignalPix(out).offsetPix - getSignalPix(out).vAdjustPix;
   
   ctx.beginPath();
-  ctx.moveTo(d.dims.left, y);
-  ctx.lineTo(d.dims.right, y);
+  ctx.moveTo(d.dims.left + getSignalPix(out).hAdjustPix, y);
+  ctx.lineTo(d.dims.right + getSignalPix(out).hAdjustPix, y);
   ctx.stroke();
 }
 
@@ -231,11 +264,11 @@ CanvasRenderingContext2D.prototype.drawSineWave = function (out) {
   for(let x = d.dims.left; x < (d.dims.right * 2)/2; x++) {
     let y = Math.sin(2 * Math.PI * (d.signal[out].freq() / getSignalPix(out).pixPerSec) *
                      (x + getSignalPix(out).phaseShiftPix)) *
-                      getSignalPix(out).peakVoltPix - getSignalPix(out).offsetPix;
+                      getSignalPix(out).peakVoltPix - getSignalPix(out).offsetPix - getSignalPix(out).vAdjustPix;
     if (x===d.dims.left) {
-      ctx.moveTo(d.dims.left, y);      
+      ctx.moveTo(d.dims.left + getSignalPix(out).hAdjustPix, y);      
     } else {
-      ctx.lineTo(x,y);
+      ctx.lineTo(x + getSignalPix(out).hAdjustPix,y);
     }
   }  
   ctx.stroke();  
@@ -258,15 +291,21 @@ CanvasRenderingContext2D.prototype.drawSquareWave = function (out) {
   let leadingEdge = true;
   
   ctx.beginPath();
-  ctx.moveTo(d.dims.left, offset); 
+  ctx.moveTo(d.dims.left + getSignalPix(out).hAdjustPix, offset - getSignalPix(out).vAdjustPix); 
   
   for (let i = 1; i<(k + 1); i++) {
+    let x = d.dims.left + pixDutyBase * i + getSignalPix(out).hAdjustPix;
+    if (x > d.dims.right) { 
+      x = d.dims.right + getSignalPix(out).hAdjustPix;
+      i = k+1; //last loop
+    };
+    
     if (leadingEdge) {      
-      ctx.lineTo(d.dims.left + pixDutyBase * i, offset);
-      ctx.lineTo(d.dims.left + pixDutyBase * i, offset + vPeak);  //leading edge
+      ctx.lineTo(x, offset - getSignalPix(out).vAdjustPix);
+      ctx.lineTo(x, offset + vPeak - getSignalPix(out).vAdjustPix);  //leading edge
     } else {      
-      ctx.lineTo(d.dims.left + pixDutyVpeak * i, offset + vPeak)
-      ctx.lineTo(d.dims.left + pixDutyVpeak * i, offset);  //falling edge
+      ctx.lineTo(x, offset + vPeak - getSignalPix(out).vAdjustPix)
+      ctx.lineTo(x, offset - getSignalPix(out).vAdjustPix);  //falling edge
     }
     leadingEdge = !leadingEdge;
   } 
@@ -280,7 +319,7 @@ function drawText () {
   let x, y;
   
   //font settings
-  ctx.font = "40px Arial";
+  ctx.font = (window.innerWidth < 800 ) ? "40px Arial" : "30px Arial";
   ctx.fillStyle = d.props.textColor;
   ctx.textAlign = "left";
   
@@ -311,7 +350,7 @@ function setDrawingProps(out) {
   ctx.shadowColor = d.props[out].lineColor;
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
-  ctx.shadowBlur = 20;
+  ctx.shadowBlur = 5;
   ctx.globalAlpha = 0.8; 
   
   ctx.lineWidth = d.props.lineWidth * 0.6;
@@ -371,6 +410,8 @@ function updateFormData (target) {
   //document.getElementById('selVoltsCh1').value = d.scope.ch1.voltsPerDivUnit;
   document.getElementById('inpVoltsCh2').value = d.scope.ch2.voltsPerDivRaw.toString();
   //document.getElementById('selVoltsCh2').value = d.scope.ch2.voltsPerDivUnit;
+  
+  
   
 }
 
@@ -458,7 +499,9 @@ let getSignalPix = (out) => {
     pixPerVolt: 0,
     peakVoltPix: 0,
     offsetPix: 0,
-    phaseShiftPix: 0    
+    phaseShiftPix: 0,
+    hAdjustPix: 0,
+    vAdjustPix: 0
   };
   
   let chan = out === 'out2' ? 'ch2' : 'ch1';  
@@ -470,13 +513,15 @@ let getSignalPix = (out) => {
   obj.peakVoltPix = (obj.pixPerVolt * d.signal[out].volts() / 2);
   obj.offsetPix = obj.pixPerVolt * d.signal[out].offset();
   obj.phaseShiftPix = obj.pixPerSec * d.signal[out].phase / (360 * d.signal[out].freq());
+  obj.hAdjustPix = gridWidth * d.scope.hAdjust; //% x gridWidth in pixels
+  obj.vAdjustPix = gridHeight * d.scope[chan].vAdjust;  //% x gridHeight in pixels
   
   return obj;
   
 }
 
 function disableForms(signal) {
-  if (signal === 'dc') {
+  if (signal.toLowerCase() === 'dc') {
     let ids = ['inpFreq', 'selFreqUnit', 'inpVolt', 'selVoltUnit', 'inpPhase'];
     ids.forEach(function (v,i) {
       document.getElementById(v).disabled = true;
@@ -556,15 +601,49 @@ outSelect.addEventListener("click", event => {
   }
   
   updateFormData(event.target.innerText.toLowerCase()); // either "out1" or "out2"
+  disableForms(d.signal[event.target.innerText.toLowerCase()].type.toLowerCase()); //signal type
   updateSignalSummary();
 });
 
-//scope arrows
+
+var interval_;
+
+
 let arrows = document.querySelectorAll(".arrows").forEach(item => {
-  item.addEventListener('mousedown', event => {
+  item.addEventListener('mousedown', event => {    
     handleAdjust(event.target);
-    //css
     event.target.classList.add("clicked");
+    interval_ = setInterval(function(){
+      handleAdjust(event.target);      
+    }, 100);
+  })
+});
+
+
+arrows = document.querySelectorAll(".arrows").forEach(item => {
+  item.addEventListener('mouseup', event => {
+    clearInterval(interval_);    
+    setTimeout(function() {
+      event.target.classList.remove("clicked");
+    }, 100, event.target)
+  })
+});
+
+
+arrows = document.querySelectorAll(".arrows").forEach(item => {
+  item.addEventListener('touchstart', event => {    
+    handleAdjust(event.target);
+    event.target.classList.add("clicked");
+    interval_ = setInterval(function(){
+      handleAdjust(event.target);      
+    }, 100);
+  })
+});
+
+
+arrows = document.querySelectorAll(".arrows").forEach(item => {
+  item.addEventListener('touchend', event => {
+    clearInterval(interval_);    
     setTimeout(function() {
       event.target.classList.remove("clicked");
     }, 100, event.target)
