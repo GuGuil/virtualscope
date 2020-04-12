@@ -1,13 +1,10 @@
 GENERAL
 --------------------------------------------------
 - include duty cycle, triangle, and sawtooth options
-- gray out fields for various signals
-- remove "enable" for function generator; instead, include in signal drop down as "(none)";
 - include measure tool
 - include CH1 + CH2 (long-term feature!)
 - ??? why is sine wave propagating at kHz?
 - save settings in local Storage
-- disable some function generator inputs
 
 
 
@@ -23,8 +20,6 @@ HTML
 CSS
 -----------------------------------------------------
 - clean up signal drop downs so they align for all devices/browsers
-- make Enable checkbox larger
-- make signal info smaller/larger based on media query
 
 
 
@@ -32,6 +27,5 @@ JAVASCRIPT
 --------------------------------------------------
 - include Duty Cycle to square (can't include Phase due to limited space)
 - update function generator information
-- get the responsiveness sorted for all devices!
 - include sub-gridlines
 - if function gen output is not enabled, grey out fields
