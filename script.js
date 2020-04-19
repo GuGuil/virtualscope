@@ -297,15 +297,19 @@ CanvasRenderingContext2D.prototype.drawSquareWave = function (out) {
     let x = d.dims.left + pixDutyBase * i + getSignalPix(out).hAdjustPix;
     if (x > d.dims.right) { 
       x = d.dims.right + getSignalPix(out).hAdjustPix;
-      i = k+1; //last loop
+      i = k+100; //last loop
     };
     
     if (leadingEdge) {      
       ctx.lineTo(x, offset - getSignalPix(out).vAdjustPix);
-      ctx.lineTo(x, offset + vPeak - getSignalPix(out).vAdjustPix);  //leading edge
+      if (i<k+1) {
+        ctx.lineTo(x, offset + vPeak - getSignalPix(out).vAdjustPix);  //leading edge
+      }
     } else {      
       ctx.lineTo(x, offset + vPeak - getSignalPix(out).vAdjustPix)
-      ctx.lineTo(x, offset - getSignalPix(out).vAdjustPix);  //falling edge
+      if (i<k+1) {
+        ctx.lineTo(x, offset - getSignalPix(out).vAdjustPix);  //falling edge
+      }
     }
     leadingEdge = !leadingEdge;
   } 
